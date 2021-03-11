@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Exception\CartDoesNotExistException;
 use App\Exception\EntityNotFountException;
 use App\Exception\GuestExistenceException;
 use App\Exception\InvalidQueryException;
@@ -50,13 +51,11 @@ class CartController extends AbstractController
     public function addItemToCart(Request $request):JsonResponse {
         $productId = $request->request->get("productId");
         $guestHash = $request->request->get("guestHash");
-
         try {
             $this->cartService->validateCartInput($productId, $guestHash);
         } catch (InvalidQueryException $e) {
             return $this->json($e->getMessage(), $e->getCode());
         }
-
         try {
             $this->cartService->addItemToCart((int)$productId, $guestHash);
         } catch (EntityNotFountException | QuantityTooBigException | GuestExistenceException | TooManyProductsInCartException $e) {
@@ -72,7 +71,6 @@ class CartController extends AbstractController
     public function removeItemFromCart(Request $request):JsonResponse {
         $productId = $request->request->get("productId");
         $guestHash = $request->request->get("guestHash");
-
         try {
             $this->cartService->validateCartInput($productId, $guestHash);
         } catch (InvalidQueryException $e) {
@@ -93,7 +91,6 @@ class CartController extends AbstractController
      */
     public function getProductsFromCart(Request $request):JsonResponse {
         $guestHash = $request->query->get("guestHash");
-
         try {
             $this->cartService->validateCartInput($guestHash);
         } catch (InvalidQueryException $e) {

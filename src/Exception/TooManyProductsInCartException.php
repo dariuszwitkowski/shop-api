@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TooManyProductsInCartException extends \RuntimeException
 {
-    const ERROR_MESSAGE = "Too many products in cart. Max: ";
+    const ERROR_MESSAGE = "Too many products in cart.";
     public function __construct()
     {
         $message = self::ERROR_MESSAGE;

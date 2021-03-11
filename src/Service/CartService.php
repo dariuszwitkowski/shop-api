@@ -49,8 +49,9 @@ class CartService
     }
     public function getItemsFromCart(string $hash):?array {
         $cart = $this->getCart($hash);
+
         if(!$cart)
-            $cart = $this->createCart($hash);
+            $cart = $this->createCart($hash)['cart'];
         $response = [];
         /** @var CartItem $cartItem */
         foreach ($cart->getCartItems() as $cartItem) {
@@ -66,6 +67,9 @@ class CartService
     }
     public function removeItemFromCart(int $productId, string $hash): void {
         $cart = $this->getCart($hash);
+
+        if(!$cart)
+            throw new EntityNotFountException();
         $product = $this->productService->findProduct($productId);
         $item = $this->getCartItem($product, $cart);
         if(!$item)
@@ -76,6 +80,9 @@ class CartService
     }
     public function addItemToCart(int $productId, string $hash): void {
         $cart = $this->getCart($hash);
+        if(!$cart)
+            $cart = $this->createCart($hash)['cart'];
+
         $product = $this->productService->findProduct($productId);
         $item = $this->getCartItem($product, $cart);
         if(!$item)
@@ -91,10 +98,11 @@ class CartService
         }
     }
     private function getCart(string $hash): ?Cart {
-        $guest = $this->guestService->getGuest($hash);;
+        $guest = $this->guestService->getGuest($hash);
         return $guest->getCart();
     }
     private function getCartItem(Product $product, Cart $cart): ?CartItem {
+
         return $this->cartItemRepository->findOneBy(["product" => $product, "cart" => $cart]);
     }
     private function createCartItem(Product $product): CartItem {

@@ -132,7 +132,13 @@ class ProductService
 
         return $product;
     }
-
+    public function transformPrice($price, bool $toFloatString = true) {
+        if($toFloatString) {
+            return floatval(substr_replace((string)$price, '.', strlen((string)$price)-2, 0));
+        } else {
+            return (int)str_replace('.','',(string)$price);
+        }
+    }
     private function saveExtremeResults(array $products,string $field) {
         if(!empty($products)) {
             $this->session->set('lastMaxId', max(array_column($products, $field)));

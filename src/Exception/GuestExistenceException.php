@@ -3,15 +3,13 @@
 
 namespace App\Exception;
 
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
-class CartExistenceException extends \RuntimeException
+class GuestExistenceException extends \RuntimeException
 {
-    const ERROR_MESSAGE_EXISTS = "Cart already exists";
-    const ERROR_MESSAGE_NOT_EXISTS = "Cart does not exists";
-    public function __construct(bool $shouldExist)
+    const ERROR_MESSAGE_EXISTS = "Guest already exists";
+    const ERROR_MESSAGE_NOT_EXISTS = "Guest does not exists";
+    public function __construct($shouldExist)
     {
         if($shouldExist)
             $message = self::ERROR_MESSAGE_NOT_EXISTS;

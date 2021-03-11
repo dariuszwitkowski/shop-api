@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProductApiController extends AbstractController
+class ProductController extends AbstractController
 {
     private ProductService $productService;
     public function __construct(ProductService $productService)
@@ -22,11 +22,11 @@ class ProductApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/product/add", name="product_add")
+     * @Route("/api/product/add", name="product_add", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function postAddProduct(Request $request): JsonResponse
+    public function addProduct(Request $request): JsonResponse
     {
         try {
             $product = $this->productService->addProduct($request->request->all());
@@ -37,11 +37,11 @@ class ProductApiController extends AbstractController
         return $this->json($product->getId(), Response::HTTP_CREATED);
     }
     /**
-     * @Route("/api/product/list", name="product_list")
+     * @Route("/api/product/list", name="product_list", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function getProductList(Request $request): JsonResponse {
+    public function productList(Request $request): JsonResponse {
         $options = $request->query->all();
         try {
             $products = $this->productService->getProducts($options);
@@ -52,11 +52,11 @@ class ProductApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/product/update", name="product_update")
+     * @Route("/api/product/update", name="product_update", methods={"PUT"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function postUpdateProduct(Request $request): JsonResponse
+    public function updateProduct(Request $request): JsonResponse
     {
         try {
             $product = $this->productService->updateProduct($request->request->all());
@@ -68,11 +68,11 @@ class ProductApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/product/remove", name="product_remove")
+     * @Route("/api/product/remove", name="product_remove", methods={"DELETE"})
      * @param Request $request
      * @return JsonResponse
      */
-    public function postRemoveProduct(Request $request): JsonResponse {
+    public function removeProduct(Request $request): JsonResponse {
         try {
             $this->productService->removeProduct((int)$request->request->get('id'));
         } catch (EntityNotFountException $e) {

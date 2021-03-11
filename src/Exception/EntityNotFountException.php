@@ -3,7 +3,6 @@
 
 namespace App\Exception;
 
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class EntityNotFountException extends \RuntimeException

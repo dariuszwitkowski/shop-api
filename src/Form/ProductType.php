@@ -5,8 +5,9 @@ namespace App\Form;
 
 
 use App\Entity\Product;
+use App\Service\ProductService;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,8 +16,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProductType extends AbstractType
 {
-
-    public function __construct() {}
+    private ProductService $productService;
+    public function __construct(ProductService $productService) {
+        $this->productService = $productService;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -27,6 +30,15 @@ class ProductType extends AbstractType
                 'data' => new \DateTime(),
                 'validation_groups' => false
             ]);
+        $builder->get('price')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($price) {
+                    return $this->productService->transformPrice($price, true);
+                },
+                function ($price) {
+                    return $this->productService->transformPrice($price, false);
+                }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

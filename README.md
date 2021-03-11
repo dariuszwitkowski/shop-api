@@ -105,7 +105,7 @@ form-body:
     productId: int
     guestHash: string
 
-#### Remove Product - **DELETE**
+#### Remove Item - **DELETE**
 Remove product from cart
 ```
 /api/cart/remove_item
@@ -116,7 +116,7 @@ form-body:
     productId: int
     guestHash: string
 
-#### Remove Product - **GET**
+#### List Products - **GET**
 List all products and sum of prices
 ```
 /api/cart/get_products
